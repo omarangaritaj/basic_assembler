@@ -1,6 +1,5 @@
 ; Prototipo actividad 6
 ; Omar Eduardo Angarita Jimenez
-; 79953510
 ; 202016893_1 | 23-julio-2021
 
 .MODEL SMALL
@@ -12,16 +11,17 @@
     opcion_3 		DB 10,13,'3. Resta de dos numeros$'
     opcion_4 		DB 10,13,'4. Multiplicacion de dos numeros$'
     opcion_5 		DB 10,13,'5. Division de dos numeros$'
-    opcion_6 		DB 10,13,'6. Salir de la aplicacion$'
-    seleccione 		DB 10,13, 'Seleccione: $'
+    opcion_6 		DB 10,13,'6. Positivo o negativo$'
+    opcion_7 		DB 10,13,'7. Salir de la aplicacion$'
+    seleccione 		DB 10,13, 'Seleccione la opcion que desee: $'
 
 	insert_numero1 	DB 10,13,'Ingrese el primer numero: $'
 	insert_numero2 	DB 10,13,'Ingrese el segundo numero: $'
 	Fin				DB 10,13,'Fin del programa.$'
-	suma      		DB 'La suma es: $'
-	resta      		DB 'La resta es: $'
-	multip  		DB 'La multiplicacion es: $'
-	division   		DB 'La division es: $'
+	suma      		DB 10,13,'La suma es: $'
+	resta      		DB 10,13,'La resta es: $'
+	multip  		DB 10,13,'La multiplicacion es: $'
+	division   		DB 10,13,'La division es: $'
 	retorno			DB 10,13, ' $'
 	alerta   		DB 10,13,'Alerta: No es una opcion valida, seleccione del 1 al 6: $'
 	error   		DB 10,13,'Error: No es un numero del 0 al 9, saliendo...$'
@@ -32,8 +32,6 @@
 
 	val_ingresado1	DB 0
 	val_ingresado2	DB 0
-	res_mult		DB 0
-	res_pot			DB 0
 	resultado		DB 0
 	seleccion		DB 0
 
@@ -44,6 +42,8 @@
 		
 		mov dx, offset Descrip
 		call _imprimir_msj
+
+	Seleccion_menu:
 		mov dx, offset retorno
 		call _imprimir_msj
 		mov dx, offset opcion_1
@@ -58,10 +58,11 @@
 		call _imprimir_msj
 		mov dx, offset opcion_6
 		call _imprimir_msj
+		mov dx, offset opcion_7
+		call _imprimir_msj
         mov dx, offset retorno
 		call _imprimir_msj
 
-	Seleccion_menu:
 		mov dx, offset seleccione
 		call _imprimir_msj
 		mov ah, 01  ; Detecta la seleccion del usuario
@@ -101,8 +102,11 @@
 		call _adquirir_numeros
 		mov ah, val_ingresado1
 		mov al, val_ingresado2
-		add ah, al
-		mov resultado, ah
+		add al, ah
+		mov resultado, al
+		mov dx, offset suma
+		call _imprimir_msj
+		mov al, resultado
 		call _ver_resultado  
 		jmp Seleccion_menu
 	_resta:
