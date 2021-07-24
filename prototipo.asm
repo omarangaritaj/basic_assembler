@@ -121,6 +121,16 @@
 		call _ver_resultado  
 		jmp Seleccion_menu
 	_multi:
+		call _adquirir_numeros
+		mov ah, val_ingresado1
+		mov al, val_ingresado2
+		mul ah
+		mov resultado, al
+		mov al, resultado
+		mov dx, offset multip
+		call _imprimir_msj
+		mov al, resultado
+		call _ver_resultado
 		jmp Seleccion_menu
 	_div:
 		jmp Seleccion_menu
