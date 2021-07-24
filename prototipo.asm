@@ -19,11 +19,16 @@
 	insert_numero2 	DB 10,13,'Ingrese el segundo numero: $'
 	Fin				DB 10,13,'Fin del programa.$'
 	suma      		DB 'La suma es: $'
+	resta      		DB 'La resta es: $'
 	multip  		DB 'La multiplicacion es: $'
 	division   		DB 'La division es: $'
 	retorno			DB 10,13, ' $'
 	alerta   		DB 10,13,'Alerta: No es una opcion valida, seleccione del 1 al 6: $'
 	error   		DB 10,13,'Error: No es un numero del 0 al 9, saliendo...$'
+
+	nombre			DB 10,13,'Omar Eduardo Angarita Jimenez$'
+	unad			DB 10,13,'CEAD Jose Acevedo y Gomez$'
+	fecha			DB 10,13,'23-jul-2021$'
 
 	val_ingresado1	DB 0
 	val_ingresado2	DB 0
@@ -64,10 +69,49 @@
 		sub al, 30h ; Convertimos a numero decimal
 		mov seleccion, al
         call _selec_valida
-        
 
-    Adquirir_numeros:
+        mov dx, offset retorno
+		call _mensaje
+		mov al, seleccion
+        cmp al, 1
+		je _autor
+        cmp al, 2
+		je _suma
+        cmp al, 3
+		je _resta
+        cmp al, 4
+		je _multi
+        cmp al, 5
+		je _div
+        cmp al, 6
+		je _positivo
+        cmp al, 7
+		je _final
 
+	_autor:
+		mov dx, offset nombre
+		call _mensaje
+		mov dx, offset unad
+		call _mensaje
+		mov dx, offset fecha
+		call _mensaje
+		jmp Seleccion_menu
+
+	_suma:
+		
+		jmp Seleccion_menu
+	_resta:
+		jmp Seleccion_menu
+	_multi:
+		jmp Seleccion_menu
+	_div:
+		jmp Seleccion_menu
+	_positivo:
+		jmp Seleccion_menu
+
+        jmp _final
+
+    _adquirir_numeros proc
 		mov dx, offset insert_numero1
 		call _mensaje
 
@@ -89,12 +133,8 @@
 
 		sub al, 30h ; Convertimos a numero decimal
 		mov val_ingresado2, al
-
-
-
-
-
-        jmp _final
+	ret
+	_adquirir_numeros endp
 	
     _selec_valida proc
 		; Si son menores que cero lanza una Alerta
@@ -102,7 +142,7 @@
 		jle _warning
 		; Si son mayores que seis lanza una Alerta
 		add al, 48
-		cmp al, 54
+		cmp al, 55
 		jg _warning
 	ret			; Si son numeros se continua
 	_selec_valida endp 
@@ -148,4 +188,4 @@
 		call _mensaje
 		mov dx, offset Fin
 		call _mensaje
-	END 
+END 
