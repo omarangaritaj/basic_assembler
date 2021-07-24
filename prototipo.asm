@@ -23,7 +23,7 @@
 	multip  		DB 10,13,'La multiplicacion es: $'
 	division   		DB 10,13,'La division es: $'
 	retorno			DB 10,13, ' $'
-	alerta   		DB 10,13,'Alerta: No es una opcion valida, seleccione del 1 al 6: $'
+	alerta   		DB 10,13,'Alerta: No es una opcion valida, seleccione del 1 al 7: $'
 	error   		DB 10,13,'Error: No es un numero del 0 al 9, saliendo...$'
 
 	nombre			DB 10,13,'Omar Eduardo Angarita Jimenez$'
@@ -109,7 +109,7 @@
 		mov al, resultado
 		call _ver_resultado  
 		jmp Seleccion_menu
-	_resta:
+	_resta: ; TODO: ajustar resultado para numeros negativos
 		call _adquirir_numeros
 		mov al, val_ingresado1
 		mov ah, val_ingresado2
