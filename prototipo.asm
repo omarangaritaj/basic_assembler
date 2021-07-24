@@ -43,27 +43,27 @@
 		mov ds, ax
 		
 		mov dx, offset Descrip
-		call _mensaje
+		call _imprimir_msj
 		mov dx, offset retorno
-		call _mensaje
+		call _imprimir_msj
 		mov dx, offset opcion_1
-		call _mensaje
+		call _imprimir_msj
 		mov dx, offset opcion_2
-		call _mensaje
+		call _imprimir_msj
 		mov dx, offset opcion_3
-		call _mensaje
+		call _imprimir_msj
 		mov dx, offset opcion_4
-		call _mensaje
+		call _imprimir_msj
 		mov dx, offset opcion_5
-		call _mensaje
+		call _imprimir_msj
 		mov dx, offset opcion_6
-		call _mensaje
+		call _imprimir_msj
         mov dx, offset retorno
-		call _mensaje
+		call _imprimir_msj
 
 	Seleccion_menu:
 		mov dx, offset seleccione
-		call _mensaje
+		call _imprimir_msj
 		mov ah, 01  ; Detecta la seleccion del usuario
 		int 21h
 		sub al, 30h ; Convertimos a numero decimal
@@ -71,7 +71,7 @@
         call _selec_valida
 
         mov dx, offset retorno
-		call _mensaje
+		call _imprimir_msj
 		mov al, seleccion
         cmp al, 1
 		je _autor
@@ -90,15 +90,20 @@
 
 	_autor:
 		mov dx, offset nombre
-		call _mensaje
+		call _imprimir_msj
 		mov dx, offset unad
-		call _mensaje
+		call _imprimir_msj
 		mov dx, offset fecha
-		call _mensaje
+		call _imprimir_msj
 		jmp Seleccion_menu
 
 	_suma:
-		
+		call _adquirir_numeros
+		mov ah, val_ingresado1
+		mov al, val_ingresado2
+		add ah, al
+		mov resultado, ah
+		call _ver_resultado  
 		jmp Seleccion_menu
 	_resta:
 		jmp Seleccion_menu
@@ -113,7 +118,7 @@
 
     _adquirir_numeros proc
 		mov dx, offset insert_numero1
-		call _mensaje
+		call _imprimir_msj
 
 		mov ah, 01  ; Solicita el primer numero
 		int 21h
@@ -126,7 +131,7 @@
 		mov dx, 0
 		
 		mov dx, offset insert_numero2
-		call _mensaje
+		call _imprimir_msj
 		
 		mov ah, 01  ; Solicita el segundo numero
 		int 21h
@@ -135,7 +140,26 @@
 		mov val_ingresado2, al
 	ret
 	_adquirir_numeros endp
-	
+
+	_ver_resultado proc	
+		mov ah, 0  	
+		mov bl, 10  ;Se le pone 10 al divisor
+		div bl  	
+		mov cl, al  
+		mov ch, ah  
+		add al, 48  ;Sumamos 48d al numero para convertirlo en ascii
+		mov ah, 2  	
+
+		mov dl, al  ;Imprimir el primer digito
+		int 21h
+		
+		add ch, 48  ;Suma 48d al numero para convertirlo en ascii
+		
+		mov dl, ch  ;Imprime el segundo caracter
+		int 21h
+	ret
+	_ver_resultado endp
+
     _selec_valida proc
 		; Si son menores que cero lanza una Alerta
 		cmp al, 0
@@ -165,27 +189,27 @@
 	ret			; Si son numeros se continua
 	_es_numero endp 
 
-	_mensaje proc ; Imprime los mensajes en Consola
+	_imprimir_msj proc ; Imprime los mensajes en Consola
         mov ah, 09h
 		int 21h
         ret
-	_mensaje endp
+	_imprimir_msj endp
 
     _warning:
 		mov dx, offset alerta
-        call _mensaje
+        call _imprimir_msj
         mov dx, offset retorno
-		call _mensaje
+		call _imprimir_msj
 		jmp Seleccion_menu
 	
 	_error:
 		mov dx, offset error
-        call _mensaje
+        call _imprimir_msj
 		jmp Seleccion_menu
 	
 	_final:
 		mov dx, offset retorno
-		call _mensaje
+		call _imprimir_msj
 		mov dx, offset Fin
-		call _mensaje
+		call _imprimir_msj
 END 
