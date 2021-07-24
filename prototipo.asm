@@ -110,6 +110,15 @@
 		call _ver_resultado  
 		jmp Seleccion_menu
 	_resta:
+		call _adquirir_numeros
+		mov al, val_ingresado1
+		mov ah, val_ingresado2
+		sub al, ah
+		mov resultado, al
+		mov dx, offset resta
+		call _imprimir_msj
+		mov al, resultado
+		call _ver_resultado  
 		jmp Seleccion_menu
 	_multi:
 		jmp Seleccion_menu
@@ -216,4 +225,6 @@
 		call _imprimir_msj
 		mov dx, offset Fin
 		call _imprimir_msj
+		mov ah, 01 
+		int 21h
 END 
