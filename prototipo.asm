@@ -133,6 +133,18 @@
 		call _ver_resultado
 		jmp Seleccion_menu
 	_div:
+		call _adquirir_numeros
+		mov ax, 0 
+		mov bx, 0
+		mov al, val_ingresado1
+		mov bl, val_ingresado2
+		div bl
+		mov resultado, al
+		mov al, resultado
+		mov dx, offset division
+		call _imprimir_msj
+		mov al, resultado
+		call _ver_resultado
 		jmp Seleccion_menu
 	_positivo:
 		jmp Seleccion_menu
