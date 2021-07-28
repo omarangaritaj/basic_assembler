@@ -21,7 +21,8 @@
 	suma      		DB 10,13,'La suma es: $'
 	resta      		DB 10,13,'La resta es: $'
 	multip  		DB 10,13,'La multiplicacion es: $'
-	division   		DB 10,13,'La division es: $'
+	division   		DB 10,13,'El cociente es: $'
+	residuo   		DB 10,13,'El residuo es: $'
 	retorno			DB 10,13, ' $'
 	alerta   		DB 10,13,'Alerta: No es una opcion valida, seleccione del 1 al 7: $'
 	error   		DB 10,13,'Error: No es un numero del 0 al 9, saliendo...$'
@@ -140,8 +141,17 @@
 		mov bl, val_ingresado2
 		div bl
 		mov resultado, al
+		mov seleccion, ah
 		mov al, resultado
 		mov dx, offset division
+		call _imprimir_msj
+		mov al, resultado
+		call _ver_resultado
+
+		mov ah, seleccion
+		mov resultado, ah
+		mov al, resultado
+		mov dx, offset residuo
 		call _imprimir_msj
 		mov al, resultado
 		call _ver_resultado
@@ -190,7 +200,7 @@
 		
 		add ch, 48  ;Suma 48d al numero para convertirlo en ascii
 		
-		mov dl, ch  ;Imprime el segundo caracter
+		mov dl, ch  ;Imprime el segundo digito
 		int 21h
 	ret
 	_ver_resultado endp
