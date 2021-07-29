@@ -18,12 +18,13 @@
 	insert_numero1 	DB 10,13,'Ingrese el primer numero: $'
 	insert_numero2 	DB 10,13,'Ingrese el segundo numero: $'
 	Fin				DB 10,13,'Fin del programa.$'
-	suma      		DB 10,13,'La suma es: $'
-	resta      		DB 10,13,'La resta es: $'
-	multip  		DB 10,13,'La multiplicacion es: $'
-	division   		DB 10,13,'El cociente es: $'
-	residuo   		DB 10,13,'El residuo es: $'
-	retorno			DB 10,13, ' $'
+	suma      		DB 10,13,' La suma es: $'
+	resta      		DB 10,13,' La resta es: $'
+	multip  		DB 10,13,' La multiplicacion es: $'
+	division   		DB 10,13,' El cociente es: $'
+	residuo   		DB 10,13,' El residuo  es: $'
+	retorno			DB 10,13, ' $' 
+	menos			DB '-$'
 	alerta   		DB 10,13,'Alerta: No es una opcion valida, seleccione del 1 al 7: $'
 	error   		DB 10,13,'Error: No es un numero del 0 al 9, saliendo...$'
 
@@ -114,12 +115,26 @@
 		call _adquirir_numeros
 		mov al, val_ingresado1
 		mov ah, val_ingresado2
+		cmp al, ah
+		jl negSub
 		sub al, ah
 		mov resultado, al
 		mov dx, offset resta
 		call _imprimir_msj
 		mov al, resultado
-		call _ver_resultado  
+		call _ver_resultado
+		jmp Seleccion_menu 
+		negSub:
+			sub ah, al
+			mov resultado, ah
+			
+			mov dx, offset resta 
+			call _imprimir_msj
+			mov dx, offset menos
+			call _imprimir_msj
+			
+			mov al, resultado
+			call _ver_resultado
 		jmp Seleccion_menu
 	_multi:
 		call _adquirir_numeros
@@ -240,14 +255,16 @@
         ret
 	_imprimir_msj endp
 
-    _warning:
+    _warning:	; Muestra una alerta cuando se selecciona 
+				; algo incorrecto en el menu
 		mov dx, offset alerta
         call _imprimir_msj
         mov dx, offset retorno
 		call _imprimir_msj
 		jmp Seleccion_menu
 	
-	_error:
+	_error:		; Muestra un error cuando NO se introduce 
+				; un numero
 		mov dx, offset error
         call _imprimir_msj
 		jmp Seleccion_menu
