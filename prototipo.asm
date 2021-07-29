@@ -23,6 +23,8 @@
 	multip  		DB 10,13,' La multiplicacion es: $'
 	division   		DB 10,13,' El cociente es: $'
 	residuo   		DB 10,13,' El residuo  es: $'
+	positivo   		DB 10,13,' El numero es positivo $'
+	negativo   		DB 10,13,' El numero es negativo $'
 	retorno			DB 10,13, ' $' 
 	menos			DB '-$'
 	alerta   		DB 10,13,'Alerta: No es una opcion valida, seleccione del 1 al 7: $'
@@ -92,6 +94,8 @@
 		je _final
 
 	_autor:
+		mov dx, offset opcion_1
+		call _imprimir_msj
 		mov dx, offset nombre
 		call _imprimir_msj
 		mov dx, offset unad
@@ -101,6 +105,8 @@
 		jmp Seleccion_menu
 
 	_suma:
+		mov dx, offset opcion_2
+		call _imprimir_msj
 		call _adquirir_numeros
 		mov ah, val_ingresado1
 		mov al, val_ingresado2
@@ -111,7 +117,9 @@
 		mov al, resultado
 		call _ver_resultado  
 		jmp Seleccion_menu
-	_resta: ; TODO: ajustar resultado para numeros negativos
+	_resta: 
+		mov dx, offset opcion_3
+		call _imprimir_msj
 		call _adquirir_numeros
 		mov al, val_ingresado1
 		mov ah, val_ingresado2
@@ -132,11 +140,12 @@
 			call _imprimir_msj
 			mov dx, offset menos
 			call _imprimir_msj
-			
 			mov al, resultado
 			call _ver_resultado
 		jmp Seleccion_menu
 	_multi:
+		mov dx, offset opcion_4
+		call _imprimir_msj
 		call _adquirir_numeros
 		mov ah, val_ingresado1
 		mov al, val_ingresado2
@@ -149,6 +158,8 @@
 		call _ver_resultado
 		jmp Seleccion_menu
 	_div:
+		mov dx, offset opcion_5
+		call _imprimir_msj
 		call _adquirir_numeros
 		mov ax, 0 
 		mov bx, 0
@@ -172,10 +183,30 @@
 		call _ver_resultado
 		jmp Seleccion_menu
 	_positivo:
+		mov dx, offset opcion_6
+		call _imprimir_msj
+		mov dx, offset insert_numero1
+		call _imprimir_msj
+
+		mov ah, 01  ; Solicita el primer numero
+		int 21h
+		
+		sub al, 30h ; Convertimos a numero decimal
+		mov val_ingresado1, al
+		cmp al, 48
+		jg _negativo
+		mov dx, offset positivo
+		call _imprimir_msj
 		jmp Seleccion_menu
 
-        jmp _final
+		_negativo:
+			mov dx, offset negativo
+			call _imprimir_msj
 
+		jmp Seleccion_menu
+
+        
+		jmp _final
     _adquirir_numeros proc
 		mov dx, offset insert_numero1
 		call _imprimir_msj
@@ -208,11 +239,14 @@
 		mov cl, al  
 		mov ch, ah  
 		add al, 48  ;Sumamos 48d al numero para convertirlo en ascii
-		mov ah, 2  	
-
+		mov ah, 2
+		cmp al, 48
+		je segundo  	
+		
 		mov dl, al  ;Imprimir el primer digito
 		int 21h
 		
+		segundo:
 		add ch, 48  ;Suma 48d al numero para convertirlo en ascii
 		
 		mov dl, ch  ;Imprime el segundo digito
